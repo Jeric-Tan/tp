@@ -80,7 +80,7 @@ public class AddressBookParser {
             return new ListCommand();
 
         case ListAppointmentsCommand.COMMAND_WORD:
-            return new ListAppointmentsCommand();
+            return new ListAppointmentsCommandParser().parse(arguments);
 
         case ToggleCommand.COMMAND_WORD:
             return new ToggleCommand();
