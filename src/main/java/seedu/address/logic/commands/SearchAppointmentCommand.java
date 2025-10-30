@@ -18,11 +18,15 @@ public class SearchAppointmentCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all appointments whose details contain any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
             + "Searches across seller name, buyer name, seller address and appointment datetime.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
+            + "Can optionally filter by timeframe using tf/ prefix.\n"
+            + "Parameters: [KEYWORD [MORE_KEYWORDS]...] [tf/TIMEFRAME]\n"
+            + "TimeFrame options: past, today, upcoming\n"
             + "Examples:\n"
             + "  " + COMMAND_WORD + " alice (finds all appointments with seller or buyer named alice)\n"
             + "  " + COMMAND_WORD + " 2025-01-01T12:00 (finds all appointments on January 1st, 2025)\n"
-            + "  " + COMMAND_WORD + " bishan (finds all appointments at addresses containing bishan)\n";
+            + "  " + COMMAND_WORD + " bishan (finds all appointments at addresses containing bishan)\n"
+            + "  " + COMMAND_WORD + " tf/today (finds all appointments scheduled for today)\n"
+            + "  " + COMMAND_WORD + " alice tf/today (finds today's appointments with alice)\n";
 
     private final AppointmentContainsKeywordsPredicate predicate;
 

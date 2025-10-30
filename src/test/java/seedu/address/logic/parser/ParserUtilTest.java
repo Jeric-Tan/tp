@@ -14,6 +14,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.appointment.TimeFrame;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
@@ -28,6 +29,7 @@ public class ParserUtilTest {
     private static final String INVALID_PROPERTY_TYPE = "HDB_10";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
+    private static final String INVALID_TIMEFRAME = "tomorrow";
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
@@ -195,5 +197,28 @@ public class ParserUtilTest {
         Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseTimeFrame_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseTimeFrame(null));
+    }
+
+    @Test
+    public void parseTimeFrame_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseTimeFrame(INVALID_TIMEFRAME));
+    }
+
+    @Test
+    public void parseTimeFrame_validValueWithoutWhitespace_returnsTimeFrame() throws Exception {
+        TimeFrame expectedTimeFrame = TimeFrame.PAST;
+        assertEquals(expectedTimeFrame, ParserUtil.parseTimeFrame("past"));
+    }
+
+    @Test
+    public void parseTimeFrame_validValueWithWhitespace_returnsTrimmedTimeFrame() throws Exception {
+        String timeFrameWithWhitespace = WHITESPACE + "today" + WHITESPACE;
+        TimeFrame expectedTimeFrame = TimeFrame.TODAY;
+        assertEquals(expectedTimeFrame, ParserUtil.parseTimeFrame(timeFrameWithWhitespace));
     }
 }

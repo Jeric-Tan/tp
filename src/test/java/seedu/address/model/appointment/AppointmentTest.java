@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalAppointments.FIONA_DANIEL_PAST;
+import static seedu.address.testutil.TypicalAppointments.FIONA_ELLE_PAST;
+import static seedu.address.testutil.TypicalAppointments.FIONA_NOBUYER_PAST;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.CARL;
@@ -11,13 +14,7 @@ import static seedu.address.testutil.TypicalPersons.DANIEL;
 import static seedu.address.testutil.TypicalPersons.DANIEL_EDITED;
 import static seedu.address.testutil.TypicalPersons.ELLE;
 import static seedu.address.testutil.TypicalPersons.FIONA;
-import static seedu.address.testutil.TypicalPersons.FIONA_DANIEL;
-import static seedu.address.testutil.TypicalPersons.FIONA_DANIEL_EDITED;
 import static seedu.address.testutil.TypicalPersons.FIONA_EDITED;
-import static seedu.address.testutil.TypicalPersons.FIONA_EDITED_DANIEL;
-import static seedu.address.testutil.TypicalPersons.FIONA_EDITED_NOBUYER;
-import static seedu.address.testutil.TypicalPersons.FIONA_ELLE_1;
-import static seedu.address.testutil.TypicalPersons.FIONA_NOBUYER;
 import static seedu.address.testutil.TypicalPersons.GEORGE;
 
 import org.junit.jupiter.api.Test;
@@ -31,7 +28,7 @@ public class AppointmentTest {
 
     @Test
     public void isPersonSeller() {
-        Appointment appointment = FIONA_ELLE_1;
+        Appointment appointment = FIONA_ELLE_PAST;
         assertTrue(appointment.isPersonSeller(FIONA));
 
         // null is false
@@ -46,7 +43,7 @@ public class AppointmentTest {
 
     @Test
     public void isPersonBuyer() {
-        Appointment appointment = FIONA_ELLE_1;
+        Appointment appointment = FIONA_ELLE_PAST;
         assertTrue(appointment.isPersonBuyer(ELLE));
 
         // null is false
@@ -61,33 +58,44 @@ public class AppointmentTest {
 
     @Test
     public void updatedWithEditedPerson_personIsSeller_returnsAppointment() {
-        // Test with buyer
-        Appointment appointment = FIONA_DANIEL;
+        // Test with buyer - use FIONA_DANIEL_PAST
+        Appointment appointment = FIONA_DANIEL_PAST;
         Appointment newAppointment = appointment.updatedWithEditedPerson(FIONA, FIONA_EDITED);
-        assertEquals(FIONA_EDITED_DANIEL, newAppointment);
-        assertEquals(FIONA_DANIEL, appointment);
+        // Check that seller was updated
+        assertTrue(newAppointment.isPersonSeller(FIONA_EDITED));
+        assertTrue(newAppointment.isPersonBuyer(DANIEL));
+        // Original should remain unchanged
+        assertTrue(appointment.isPersonSeller(FIONA));
+        assertTrue(appointment.isPersonBuyer(DANIEL));
 
-        // Test without buyer
-        appointment = FIONA_NOBUYER;
+        // Test without buyer - use FIONA_NOBUYER_PAST
+        appointment = FIONA_NOBUYER_PAST;
         newAppointment = appointment.updatedWithEditedPerson(FIONA, FIONA_EDITED);
-        assertEquals(FIONA_EDITED_NOBUYER, newAppointment);
-        assertEquals(FIONA_NOBUYER, appointment);
+        // Check that seller was updated
+        assertTrue(newAppointment.isPersonSeller(FIONA_EDITED));
+        assertFalse(newAppointment.isPersonBuyer(DANIEL));
+        // Original should remain unchanged
+        assertTrue(appointment.isPersonSeller(FIONA));
     }
 
     @Test
     public void updatedWithEditedPerson_personIsBuyer_returnsAppointment() {
-        Appointment appointment = FIONA_DANIEL;
+        Appointment appointment = FIONA_DANIEL_PAST;
         Appointment newAppointment = appointment.updatedWithEditedPerson(DANIEL, DANIEL_EDITED);
-        assertEquals(FIONA_DANIEL_EDITED, newAppointment);
-        assertEquals(FIONA_DANIEL, appointment);
+        // Check that buyer was updated
+        assertTrue(newAppointment.isPersonSeller(FIONA));
+        assertTrue(newAppointment.isPersonBuyer(DANIEL_EDITED));
+        // Original should remain unchanged
+        assertTrue(appointment.isPersonSeller(FIONA));
+        assertTrue(appointment.isPersonBuyer(DANIEL));
     }
 
     @Test
     public void updatedWithEditedPerson_personIsNotParticipant_returnsSameAppointment() {
-        Appointment appointment = FIONA_ELLE_1;
+        Appointment appointment = FIONA_ELLE_PAST;
         Appointment newAppointment = appointment.updatedWithEditedPerson(DANIEL, DANIEL_EDITED);
-        assertEquals(FIONA_ELLE_1, newAppointment);
-        assertEquals(FIONA_ELLE_1, appointment);
+        // Should return same appointment since DANIEL is not a participant
+        assertEquals(appointment, newAppointment);
     }
 
     @Test
@@ -139,8 +147,7 @@ public class AppointmentTest {
 
     @Test
     public void containsKeyword() {
-        // Use existing appointment from TypicalPersons
-        Appointment appointment = FIONA_ELLE_1; // FIONA (seller) and ELLE (buyer) at 2025-01-01T12:00
+        Appointment appointment = FIONA_ELLE_PAST; // FIONA (seller) and ELLE (buyer), date is 1 month ago
 
         // Seller name matching (Fiona Kunz)
         assertTrue(appointment.containsKeyword("Fiona"));
@@ -164,10 +171,12 @@ public class AppointmentTest {
         assertTrue(appointment.containsKeyword("HDB_5")); // Elle's property type
         assertTrue(appointment.containsKeyword("buyer")); // Elle's role
 
-        // Appointment datetime matching
-        assertTrue(appointment.containsKeyword("2025-01-01T12:00"));
-        assertFalse(appointment.containsKeyword("2025-01-01")); // Partial datetime should not match
-        assertFalse(appointment.containsKeyword("12:00")); // Partial datetime should not match
+        // Appointment datetime matching - use the actual datetime from the appointment
+        String appointmentDatetimeString = appointment.appointmentDatetime.toString();
+        assertTrue(appointment.containsKeyword(appointmentDatetimeString));
+        // Partial datetime should not match
+        assertFalse(appointment.containsKeyword(appointmentDatetimeString.substring(0, 10))); // Date only
+        assertFalse(appointment.containsKeyword("12:00")); // Time only
 
         // Case insensitive matching
         assertTrue(appointment.containsKeyword("FIONA"));

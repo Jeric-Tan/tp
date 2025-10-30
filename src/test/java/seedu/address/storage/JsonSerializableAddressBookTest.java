@@ -27,8 +27,13 @@ public class JsonSerializableAddressBookTest {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(TYPICAL_PERSONS_FILE,
                 JsonSerializableAddressBook.class).get();
         AddressBook addressBookFromFile = dataFromFile.toModelType();
-        AddressBook typicalPersonsAddressBook = TypicalPersons.getTypicalAddressBook();
-        assertEquals(addressBookFromFile, typicalPersonsAddressBook);
+
+        // Create expected AddressBook with only persons (no appointments)
+        AddressBook expectedAddressBook = new AddressBook();
+        for (seedu.address.model.person.Person person : TypicalPersons.getTypicalPersons()) {
+            expectedAddressBook.addPerson(person);
+        }
+        assertEquals(addressBookFromFile, expectedAddressBook);
     }
 
     @Test

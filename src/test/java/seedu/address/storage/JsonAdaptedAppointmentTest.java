@@ -3,10 +3,10 @@ package seedu.address.storage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.storage.JsonAdaptedAppointment.MISSING_FIELD_MESSAGE_FORMAT;
 import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalAppointments.FIONA_DANIEL_PAST;
+import static seedu.address.testutil.TypicalAppointments.FIONA_NOBUYER_PAST;
 import static seedu.address.testutil.TypicalPersons.DANIEL;
 import static seedu.address.testutil.TypicalPersons.FIONA;
-import static seedu.address.testutil.TypicalPersons.FIONA_DANIEL;
-import static seedu.address.testutil.TypicalPersons.FIONA_NOBUYER;
 
 import org.junit.jupiter.api.Test;
 
@@ -21,8 +21,8 @@ public class JsonAdaptedAppointmentTest {
 
     @Test
     public void toModelType_validAppointmentDatetime_returnsAppointment() throws Exception {
-        JsonAdaptedAppointment appointment = new JsonAdaptedAppointment(FIONA_DANIEL);
-        assertEquals(FIONA_DANIEL, appointment.toModelType(FIONA, DANIEL));
+        JsonAdaptedAppointment appointment = new JsonAdaptedAppointment(FIONA_DANIEL_PAST);
+        assertEquals(FIONA_DANIEL_PAST, appointment.toModelType(FIONA, DANIEL));
     }
 
     @Test
@@ -51,8 +51,9 @@ public class JsonAdaptedAppointmentTest {
 
     @Test
     public void toModelType_nullBuyer_returnsAppointment() throws Exception {
-        JsonAdaptedAppointment appointment = new JsonAdaptedAppointment(FIONA_NOBUYER.appointmentDatetime.toString(),
+        JsonAdaptedAppointment appointment = new JsonAdaptedAppointment(
+                FIONA_NOBUYER_PAST.appointmentDatetime.toString(),
                 FIONA.getPhone().value, null);
-        assertEquals(FIONA_NOBUYER, appointment.toModelType(FIONA, null));
+        assertEquals(FIONA_NOBUYER_PAST, appointment.toModelType(FIONA, null));
     }
 }

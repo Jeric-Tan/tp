@@ -10,6 +10,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.appointment.AppointmentDatetime;
+import seedu.address.model.appointment.TimeFrame;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
@@ -146,6 +147,21 @@ public class ParserUtil {
             throw new ParseException(AppointmentDatetime.MESSAGE_CONSTRAINTS);
         }
         return new AppointmentDatetime(trimmedDatetime);
+    }
+
+    /**
+     * Parses a {@code String timeFrame} into a {@code TimeFrame}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code timeFrame} is invalid.
+     */
+    public static TimeFrame parseTimeFrame(String timeFrame) throws ParseException {
+        requireNonNull(timeFrame);
+        String trimmedTimeFrame = timeFrame.trim();
+        if (!TimeFrame.isValidTimeFrame(trimmedTimeFrame)) {
+            throw new ParseException(TimeFrame.MESSAGE_CONSTRAINTS);
+        }
+        return TimeFrame.fromString(trimmedTimeFrame);
     }
 
     /**

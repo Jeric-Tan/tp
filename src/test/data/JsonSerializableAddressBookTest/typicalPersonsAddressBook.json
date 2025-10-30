@@ -1,5 +1,5 @@
 {
-  "_comment": "AddressBook save file which contains the same Person values as in TypicalPersons#getTypicalAddressBook()",
+  "_comment": "AddressBook save file which contains the same Person values as in TypicalPersons#getTypicalPersons(). Note: Appointments are excluded from this test file because they use dynamic dates (relative to current date) in TypicalAppointments and cannot be compared with hardcoded JSON dates.",
   "persons" : [ {
     "name" : "Alice Pauline",
     "phone" : "94351253",
@@ -57,21 +57,5 @@
     "addressType" : "EC",
     "tags" : [ ]
   } ],
-  "appointments" : [ {
-    "seller" : "9482427",
-    "buyer" : "9482224",
-    "appointmentDateTime" : "2025-01-01T12:00"
-  }, {
-    "seller" : "9482427",
-    "buyer" : "9482224",
-    "appointmentDateTime" : "2025-01-02T14:00"
-  }, {
-    "seller" : "9482427",
-    "buyer" : "87652533",
-    "appointmentDateTime" : "2025-01-02T12:00"
-  }, {
-    "seller" : "9482442",
-    "buyer" : "98765432",
-    "appointmentDateTime" : "2025-01-01T18:00"
-  } ]
+  "appointments" : [ ]
 }
