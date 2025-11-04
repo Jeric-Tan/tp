@@ -101,6 +101,7 @@ deactivate CommandResult
 EditAppointmentCommand -->[ : res
 deactivate EditAppointmentCommand
 
+destroy EditAppointmentDescriptor
 destroy EditAppointmentCommand
 
 @enduml
