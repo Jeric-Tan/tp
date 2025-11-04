@@ -138,7 +138,7 @@ A person is uniquely identified by their **phone number**. You may add clients w
 </div>
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A client can have any number of tags (including none)
+A client can have any number of tags (including none).
 </div>
 
 <div style="page-break-after: always;"></div>
@@ -173,11 +173,11 @@ Finds clients whose details contain any of the keywords you provide. Details inc
 
 Format: `search KEYWORD [MORE_KEYWORDS]...`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Clients matching at least one keyword will be returned
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* The search is case-insensitive. e.g `hans` will match `Hans`.
+* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`.
+* Only full words will be matched e.g. `Han` will not match `Hans`.
+* Clients matching at least one keyword will be returned.
+  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 After using the `search` command, you can use the new index numbers shown on screen for commands that require index as an input, such as [`edit`](#editing-a-client--edit) or [`ap`](#adding-an-appointment--ap).
@@ -217,7 +217,7 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [r/ROLE] [a/ADDRESS] [pt/PROPER
 
 <div markdown="block" class="alert alert-warning">:exclamation: **Caution:**
 * Editing tags replaces the entire tag set. i.e. Adding of tags is not cumulative.
-* Address and property type cannot be edited independently. When editing address or property type, you must provide both address and property type input 
+* Address and property type cannot be edited independently. When editing address or property type, you must provide both address and property type input. 
   values.
 </div>
 
@@ -245,7 +245,7 @@ A person is uniquely identified by their **phone number**. You may add clients w
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st client to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd client to be `Betsy Crower` and clears all existing tags.
-*  `edit 3 r/seller` Edits the role of the 3rd client to `seller`
+*  `edit 3 r/seller` Edits the role of the 3rd client to `seller`.
 *  `edit 3 a/59 Jalan Besar Road pt/COMMERCIAL_FH` Edits the address and property type of the 3rd client to `59 Jalan Besar Road` and `COMMERCIAL_FH` respectively.
 
 <p float="left">
@@ -300,7 +300,7 @@ Format: `ap d/DATETIME s/SELLER_INDEX [b/BUYER_INDEX]`
 
 * Adds an appointment with the seller being the client specified by `SELLER_INDEX` and the buyer being the client specified by `BUYER_INDEX`.
 * To create an appointment with only a seller, simply omit the `b/` tag.
-* The indices refer to the index numbers shown in the displayed client list which will be a positive whole number (e.g. 1, 2, 3, ...)
+* The indices refer to the index numbers shown in the displayed client list which will be a positive whole number (e.g. 1, 2, 3, ...).
 * **You may assign a client without the buyer role to the buyer (and similarly for seller).** 
 * You may not assign the same person as both the buyer and seller for the same appointment.
 * Provide the datetime in an ISO 8601-compliant format. (e.g. `yyyy-MM-ddTHH:mm`)
@@ -328,18 +328,18 @@ Examples:
 
 ### Listing all appointments : `lap`
 
-Shows a list of all appointments in the ClientSquare app, sorted by date and time
+Shows a list of all appointments in the ClientSquare app, sorted by date and time.
 (earliest at the top to latest at the bottom).
 
 Format: `lap`
 
-* Displays all appointments from all clients
-* Each appointment shows the date/time, location (seller client's address), and the buyer/seller names
-* Appointments are sorted chronologically from present to future
-* Use `list` to switch back to the client list view
+* Displays all appointments from all clients.
+* Each appointment shows the date/time, location (seller client's address), and the buyer/seller names.
+* Appointments are sorted chronologically from present to future.
+* Use `list` to switch back to the client list view.
 
 Example:
-* `lap` displays all appointments sorted by date and time
+* `lap` displays all appointments sorted by date and time.
 <div style="text-align:center;">
   <img src="images/lapResult.png" alt="result for 'lap'" width="90%">
 </div>
@@ -351,13 +351,12 @@ Finds appointments whose details contain any of the keywords you provide and/or 
 
 Format: `sap [tf/TIMEFRAME] [KEYWORD [MORE_KEYWORDS]...]`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The valid timeframes consist of `past`, `today` and `upcoming` (case-insensitive)
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+* The search is case-insensitive. e.g `hans` will match `Hans`.
+* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`.
 * At least one of the optional fields must be provided.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Appointments matching at least one keyword will be returned
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* Only full words will be matched e.g. `Han` will not match `Hans`.
+* Appointments matching at least one keyword will be returned.
+  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`.
 
 <div markdown="block" class="alert alert-info">
 
@@ -365,18 +364,13 @@ Format: `sap [tf/TIMEFRAME] [KEYWORD [MORE_KEYWORDS]...]`
 
 </div>
 
-<div markdown="block" class="alert alert-info">:information_source: **Note:** 
-* When searching for appointments, you must provide either a `TIMEFRAME` or `KEYWORD`
-* If you specify a timeframe, keywords are optional `(FORMAT 1)`
-    * Example: `sap tf/today` will list all appointments scheduled today
-* If no timeframe is specified, at least one keyword is required `(FORMAT 2)`
-    * Example: `sap jake` will list all appointments involving `jake`
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+After using the `sap` command, you can use the new index numbers shown on screen for commands that require index as an input, such as [`eap`](#editing-an-appointment--edit) or [`dap`](#deleting-an-appointment--dap).
 </div>
 
 
-
 Examples:
-* `sap Charlotte` returns all appointments with 'Charlotte'
+* `sap Charlotte` returns all appointments with 'Charlotte'.
 <div style="text-align:center;">
   <img src="images/searchAppointmentCharlotteResult.png" alt="result for 'sap Charlotte'" width="90%">
 </div>
@@ -384,13 +378,13 @@ Examples:
 
 <div style="page-break-after: always;"></div>
 
-* `sap Alex David` returns all appointments with `Alex` **or** `David`
+* `sap Alex David` returns all appointments with `Alex` **or** `David`.
 <div style="text-align:center;">
   <img src="images/searchAppointmentAlexDavidResult.png" alt="result for 'sap Alex David'" width="90%">
 </div>
 <br>
 
-*  `sap tf/upcoming David` returns upcoming's appointments with `David Li`(for illustration purposes, assume the date to be 2025-11-04)
+*  `sap tf/upcoming David` returns upcoming's appointments with `David Li`(for illustration purposes, assume the date to be 2025-11-04).
 <div style="text-align:center;">
   <img src="images/searchAppointmentUpcomingDavidResult.png" alt="result for 'sap tf/today David'" width="90%">
 </div>
@@ -420,10 +414,10 @@ Examples:
 * `lap` followed by `eap 1 d/2026-02-01T10:00 b/4` changes both the datetime and buyer of the 1st appointment.
 * `lap` followed by `eap 3 b/` removes the buyer from the 3rd appointment.
 
-Tips:
+<div markdown="block" class="alert alert-primary">:bulb: **Tip:**
 * Use [`lap`](#listing-all-appointments--lap) first to see the appointment indices.
 * To remove a buyer from an appointment without deleting the appointment, use `b/` with no index.
-
+</div>
 
 <div style="page-break-after: always;"></div>
 
@@ -436,8 +430,15 @@ Format: `dap INDEX`
 * Deletes the appointment specified by `INDEX`.
 * The index refers to the index number shown in the displayed appointment list. This will be a positive whole number, such as 1, 2, 3, ...
 
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use the [`sap`](#searching-an-appointment--sap) command to easily locate the appointment that you wish to delete.
+</div>
+
 Examples:
 *  `dap 1` Deletes the first appointment shown in the appointment list.
+<div style="text-align:center;">
+  <img src="images/dapResult.png" alt="result for 'dap 1'" width="90%">
+</div>
 
 <div style="page-break-after: always;"></div>
 
@@ -465,22 +466,22 @@ Switches between **light** and **dark** themes instantly.
 
 Format: `toggle`
 
-* No parameters are required
-* Each execution switches to the alternate theme
-* Theme preference is **persisted across sessions**
+* No parameters are required.
+* Each execution switches to the alternate theme.
+* Theme preference is **persisted across sessions**.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-The theme change applies **immediately** and affects the **entire application interface**
+The theme change applies **immediately** and affects the **entire application interface**.
 </div>
 
 <div markdown="block" class="alert alert-primary">:bulb: **Tip:**
-* Switch to **dark mode** when working in low-light environments to reduce eye strain
-* Use **light mode** during presentations or when sharing your screen for better visibility
-* The theme switches **immediately** without requiring a restart
+* Switch to **dark mode** when working in low-light environments to reduce eye strain.
+* Use **light mode** during presentations or when sharing your screen for better visibility.
+* The theme switches **immediately** without requiring a restart.
 </div>
 
 Examples:
-* `toggle` switches from light to dark mode (or vice versa)
+* `toggle` switches from light to dark mode (or vice versa).
 
 <div style="display: flex; justify-content: center; gap: 5px;">
   <img src="images/ToggleResultLight.png" alt="Light mode" width="49%">
@@ -495,9 +496,9 @@ Exits the program and closes the application window.
 
 Format: `exit`
 
-* The application will close **immediately** without confirmation
-* All data is **automatically saved** before exit
-* You can also close the application using the window close button (X)
+* The application will close **immediately** without confirmation.
+* All data is **automatically saved** before exit.
+* You can also close the application using the window close button (X).
 
 Examples:
 * `exit` closes the application
