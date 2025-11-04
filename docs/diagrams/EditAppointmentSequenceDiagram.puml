@@ -1,0 +1,107 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":EditAppointmentCommand" as EditAppointmentCommand LOGIC_COLOR
+participant "descriptor:EditAppointmentDescriptor" as EditAppointmentDescriptor LOGIC_COLOR
+participant "res:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "model:Model" as Model MODEL_COLOR
+participant "lastShownList:ObservableList<Appointment>" as AppointmentList MODEL_COLOR
+participant "personList:ObservableList<Person>" as PersonList MODEL_COLOR
+participant "editedAppointment:Appointment" as EditedAppointment MODEL_COLOR
+end box
+
+[-> EditAppointmentCommand : execute(model)
+activate EditAppointmentCommand
+
+EditAppointmentCommand -> Model : get filtered appointment list
+activate Model
+
+Model --> EditAppointmentCommand : lastShownList
+deactivate Model
+
+EditAppointmentCommand -> AppointmentList : get appointment at index
+activate AppointmentList
+
+AppointmentList --> EditAppointmentCommand : appointmentToEdit
+deactivate AppointmentList
+
+EditAppointmentCommand -> EditAppointmentCommand : createEditedAppointment
+activate EditAppointmentCommand
+
+EditAppointmentCommand -> EditAppointmentDescriptor : getAppointmentDatetime()
+activate EditAppointmentDescriptor
+
+EditAppointmentDescriptor --> EditAppointmentCommand : Optional<AppointmentDatetime>
+deactivate EditAppointmentDescriptor
+
+EditAppointmentCommand -> Model : get filtered person list
+activate Model
+
+Model --> EditAppointmentCommand : personList
+deactivate Model
+
+opt seller index present in descriptor
+
+EditAppointmentCommand -> PersonList : get person at seller index
+activate PersonList
+
+PersonList --> EditAppointmentCommand : updatedSeller
+deactivate PersonList
+
+end opt
+
+opt buyer index present in descriptor
+
+EditAppointmentCommand -> PersonList : get person at buyer index
+activate PersonList
+
+PersonList --> EditAppointmentCommand : updatedBuyer
+deactivate PersonList
+
+end opt
+
+EditAppointmentCommand -> EditedAppointment ** : create
+activate EditedAppointment
+
+EditedAppointment --> EditAppointmentCommand : editedAppointment
+deactivate EditedAppointment
+
+EditAppointmentCommand --> EditAppointmentCommand : editedAppointment
+deactivate EditAppointmentCommand
+
+EditAppointmentCommand -> Model : hasAppointment(editedAppointment)
+activate Model
+
+Model --> EditAppointmentCommand : false
+deactivate Model
+
+EditAppointmentCommand -> Model : setAppointment(appointmentToEdit, editedAppointment)
+activate Model
+
+Model --> EditAppointmentCommand
+deactivate Model
+
+EditAppointmentCommand -> Model : updateFilteredAppointmentList
+activate Model
+
+Model --> EditAppointmentCommand
+deactivate Model
+
+EditAppointmentCommand -> CommandResult ** : create
+activate CommandResult
+
+CommandResult --> EditAppointmentCommand : res
+deactivate CommandResult
+
+EditAppointmentCommand -->[ : res
+deactivate EditAppointmentCommand
+
+destroy EditAppointmentDescriptor
+destroy EditAppointmentCommand
+
+@enduml

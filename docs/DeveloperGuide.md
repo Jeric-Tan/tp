@@ -152,19 +152,19 @@ This section describes some noteworthy details on how certain features are imple
 
 #### Overall Design Considerations:
 
-In planning our design for appointments, we aimed to 
+In planning our design for appointments, we aimed to
 - minimise coupling between new classes added
 - maximise cohesion in new classes added and keeping to the design styles present in the existing `Model`.
-- make it easily convertible to Json for the `Storage` component.  
+- make it easily convertible to Json for the `Storage` component.
 
 We prioritised these factors over implementing the most efficient solution possible as our NFRs did not outline a need to support a data volume large enough such that it would make a major difference. In the event that these requirements became necessary, a good core design would be more easily extensible.
 
 We finalised on the design present in our product before the MVP release. This can be found in [this part](#model-component) of the Architecture section. Of particular note are:
 
-- A unidirectional coupling from `Appointment` to `Person`. We decided that this would suffice, eliminating the need to maintain data integrity if a bidirectional relationship were required. We accepted this tradeoff of reduced coupling for decreased efficiency (to modify a person’s appointments, you would need to look at all appointments to find matches) in line with our design goals. This could be modified in the future if the necessity arises.
+- A unidirectional coupling from `Appointment` to `Person`. We decided that this would suffice, eliminating the need to maintain data integrity if a bidirectional relationship were required. We accepted this tradeoff of reduced coupling for decreased efficiency (to modify a person's appointments, you would need to look at all appointments to find matches) in line with our design goals. This could be modified in the future if the necessity arises.
 - Two distinct associations between `Person` and `Appointment` rather than a single association with multiplicity 2. This is to delineate the distinct buyer and seller roles in an appointment. We gauged that the extra effort to implement a more generalised approach would not be required within the scope of this project. This approach has been outlined in the Future Extensions appendix.
 - `AppointmentDatetime` is a separate class. This keeps the design similar to that of `Person`, where even attribute fields like `Name` are modelled as a separate class.
-- `buyer` is optional. This feature was not present in the MVP, but we thought that it would be useful to have (perhaps an initial assessment of a property). It would also be possible to make seller optional, but we thought that that would have more niche utility and so didn’t include it.
+- `buyer` is optional. This feature was not present in the MVP, but we thought that it would be useful to have (perhaps an initial assessment of a property). It would also be possible to make seller optional, but we thought that that would have more niche utility and so didn't include it.
 - Within the `Appointment` class and relevant `Logic` classes (`Parser`, `Command`), the null values are handled internally, with any external exposure making use of Java's `Optional`. This helps to reduce the possibility of having a `NullPointerException`.
 - `Person`'s phone number (`Phone`) is made unique. This allows us to store only the phone number of the persons involved in each appointment, removing the possibility of conflicts and increasing the ease of manual editing (for advanced users).
 
@@ -179,11 +179,11 @@ The user passes these parameters in using the prefixes `d/` (datetime), `s/` (se
 
 The `Parser` class for this command helps to convert the input strings into objects to be manipulated.
 - The string passed into `d/` is converted directly into the required `AppointmentDatetime` with the help of the `ParserUtil` class.
-- The strings passed into `s/` and `b/` are converted (also with `ParserUtil`'s help) into the `Index` abstraction used to represent the index of the requested person in the last shown list. 
+- The strings passed into `s/` and `b/` are converted (also with `ParserUtil`'s help) into the `Index` abstraction used to represent the index of the requested person in the last shown list.
 
-These objects are passed into a new `Command` object. This has an overloaded constructor to handle the cases of `buyer` being `null` or otherwise. 
+These objects are passed into a new `Command` object. This has an overloaded constructor to handle the cases of `buyer` being `null` or otherwise.
 
-When the `execute` method is executed, 
+When the `execute` method is executed,
 - the `lastShownList` of Persons is obtained from `Model`.
 - the `lastShownList` is asked for the required persons using the `Index` objects. This returns the `Person` objects needed for `seller` and `buyer`.
 - finally, the actual `Appointment` is created using the one or two `Person` objects and one `AppointmentDatetime` object, again utilising an overloaded constructor.
@@ -191,6 +191,38 @@ When the `execute` method is executed,
 The following simplified sequence diagram outlines the main operations of `AddAppointmentCommand::execute`.
 
 ![ApCommandExecuteSequenceDiagram](images/ApCommandExecuteSequenceDiagram.png)
+
+#### Edit Appointment
+
+Edit appointment (`eap`) allows users to modify an existing `Appointment`, with the following parameters:
+- `appointmentDatetime`, which is of class `AppointmentDatetime`.
+- `seller`, which is of class `Person`.
+- `buyer`, which is of class `Person` and can be removed by providing an empty value.
+
+The user passes these parameters in using the prefixes `d/` (datetime), `s/` (seller) and `b/` (buyer).
+
+The `Parser` class for this command helps to convert the input strings into objects to be manipulated.
+- The string passed into `d/` is converted directly into the required `AppointmentDatetime` with the help of the `ParserUtil` class.
+- The strings passed into `s/` and `b/` are converted (also with `ParserUtil`'s help) into the `Index` abstraction used to represent the index of the requested person in the last shown list.
+- A special case: if `b/` is provided with an empty value, the descriptor is set to remove the buyer using a sentinel value.
+
+These objects are stored in an `EditAppointmentDescriptor` object, which tracks which fields should be updated. The descriptor and the appointment index are passed into a new `EditAppointmentCommand` object.
+
+When the `execute` method is executed:
+- The filtered appointment list is obtained from `Model`.
+- The appointment to edit is retrieved using the appointment index.
+- `createEditedAppointment` is called, which:
+  - Retrieves the updated datetime from the descriptor, or keeps the original if not specified.
+  - Retrieves the filtered person list from the model.
+  - If a seller index is present in the descriptor, retrieves the new seller from the person list, otherwise keeps the original seller.
+  - If a buyer index is present in the descriptor, retrieves the new buyer from the person list. If the buyer is to be removed (sentinel value detected), sets buyer to null, otherwise keeps the original buyer.
+  - Creates a new `Appointment` object with the merged values.
+- The model is checked for duplicate appointments using `hasAppointment`.
+- Finally, `Model::setAppointment` replaces the old appointment with the edited one, and `updateFilteredAppointmentList` refreshes the displayed list.
+
+The following simplified sequence diagram outlines the main operations of `EditAppointmentCommand::execute`.
+
+![EditAppointmentSequenceDiagram](images/EditAppointmentSequenceDiagram.png)
 
 ### \[Proposed\] Undo/redo feature
 
