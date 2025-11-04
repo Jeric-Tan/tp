@@ -365,7 +365,7 @@ Format: `sap [tf/TIMEFRAME] [KEYWORD [MORE_KEYWORDS]...]`
 </div>
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-After using the `sap` command, you can use the new index numbers shown on screen for commands that require index as an input, such as [`eap`](#editing-an-appointment--edit) or [`dap`](#deleting-an-appointment--dap).
+After using the `sap` command, you can use the new index numbers shown on screen for commands that require index as an input, such as [`eap`](#editing-an-appointment--eap) or [`dap`](#deleting-an-appointment--dap).
 </div>
 
 
