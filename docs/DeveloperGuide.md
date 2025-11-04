@@ -213,8 +213,9 @@ When the `execute` method is executed:
 - The appointment to edit is retrieved using the appointment index.
 - `createEditedAppointment` is called, which:
   - Retrieves the updated datetime from the descriptor, or keeps the original if not specified.
-  - Calls `getUpdatedSeller` which uses `getPersonFromIndex` to retrieve the new seller from the person list if a seller index is present in the descriptor, otherwise keeps the original seller.
-  - Calls `getUpdatedBuyer` which similarly retrieves the new buyer if specified, removes the buyer if the sentinel value is detected, or keeps the original buyer.
+  - Retrieves the filtered person list from the model.
+  - If a seller index is present in the descriptor, retrieves the new seller from the person list, otherwise keeps the original seller.
+  - If a buyer index is present in the descriptor, retrieves the new buyer from the person list. If the buyer is to be removed (sentinel value detected), sets buyer to null, otherwise keeps the original buyer.
   - Creates a new `Appointment` object with the merged values.
 - The model is checked for duplicate appointments using `hasAppointment`.
 - Finally, `Model::setAppointment` replaces the old appointment with the edited one, and `updateFilteredAppointmentList` refreshes the displayed list.

@@ -39,19 +39,13 @@ activate EditAppointmentDescriptor
 EditAppointmentDescriptor --> EditAppointmentCommand : Optional<AppointmentDatetime>
 deactivate EditAppointmentDescriptor
 
-EditAppointmentCommand -> EditAppointmentCommand : getUpdatedSeller
-activate EditAppointmentCommand
-
-opt seller index present in descriptor
-
-EditAppointmentCommand -> EditAppointmentCommand : getPersonFromIndex
-activate EditAppointmentCommand
-
 EditAppointmentCommand -> Model : get filtered person list
 activate Model
 
 Model --> EditAppointmentCommand : personList
 deactivate Model
+
+opt seller index present in descriptor
 
 EditAppointmentCommand -> PersonList : get person at seller index
 activate PersonList
@@ -59,21 +53,9 @@ activate PersonList
 PersonList --> EditAppointmentCommand : updatedSeller
 deactivate PersonList
 
-EditAppointmentCommand --> EditAppointmentCommand
-deactivate EditAppointmentCommand
-
 end opt
 
-EditAppointmentCommand --> EditAppointmentCommand : updatedSeller
-deactivate EditAppointmentCommand
-
-EditAppointmentCommand -> EditAppointmentCommand : getUpdatedBuyer
-activate EditAppointmentCommand
-
 opt buyer index present in descriptor
-
-EditAppointmentCommand -> EditAppointmentCommand : getPersonFromIndex
-activate EditAppointmentCommand
 
 EditAppointmentCommand -> PersonList : get person at buyer index
 activate PersonList
@@ -81,13 +63,7 @@ activate PersonList
 PersonList --> EditAppointmentCommand : updatedBuyer
 deactivate PersonList
 
-EditAppointmentCommand --> EditAppointmentCommand
-deactivate EditAppointmentCommand
-
 end opt
-
-EditAppointmentCommand --> EditAppointmentCommand : updatedBuyer
-deactivate EditAppointmentCommand
 
 EditAppointmentCommand -> EditedAppointment ** : create
 activate EditedAppointment
